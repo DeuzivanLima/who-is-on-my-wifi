@@ -30,6 +30,9 @@ NULL_MAC = '00:00:00:00:00:00'
 cursor.execute(SQL_CODE_CREATE_TABLE)
 sqlite_conn.commit()
 
+cursor.execute('UPDATE device SET CTIMES_ONLINE = 0')
+sqlite_conn.commit()
+
 print('[+] Done!\n')
 for host in hosts_list:
     IP = host[1]['addresses']['ipv4']
@@ -53,7 +56,7 @@ for host in hosts_list:
         sqlite_conn.commit()
     else:
         device = device[0]
-        cursor.execute('UPDATE device SET CTIMES_ONLINE = ?, LAST_TIME_ONLINE = ? WHERE MAC = ?', (device[4] + 1, now, device[2],))
+        cursor.execute('UPDATE device SET CTIMES_ONLINE = ?, LAST_TIME_ONLINE = ? WHERE MAC = ?', (1, now, device[2],))
         sqlite_conn.commit()
         
         if device[2] == MAC and device[3] != IP:
